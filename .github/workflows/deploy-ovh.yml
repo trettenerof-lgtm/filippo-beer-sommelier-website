@@ -24,13 +24,24 @@ jobs:
           unzip -q filippo-beer-sommelier-site-MVP-v1.7-Deployment-Candidate.zip -d site
           test -f site/index.html
 
-      - name: FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ftp.cluster129.hosting.ovh.net
-          username: filippx
-          password: ${{ secrets.OVH_FTP_PASSWORD }}
-          protocol: ftp
-          port: 21
-          server-dir: /www/
-          local-dir: site/
+      - name: Install lftp
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lftp
+
+      - name: Deploy to OVHcloud via SFTP
+        shell: bash
+        env:
+          SFTP_PASSWORD: ${{ secrets.OVH_FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          : "${SFTP_PASSWORD:?Missing OVH_FTP_PASSWORD}"
+
+          lftp -u "filippx","$SFTP_PASSWORD" "sftp://ftp.cluster129.hosting.ovh.net:22" <<'EOF'
+          set sftp:auto-confirm yes
+          set net:max-retries 2
+          set net:timeout 30
+          mirror --reverse --delete --verbose --parallel=4 site/ /home/filippx/www/
+          bye
+          EOF
