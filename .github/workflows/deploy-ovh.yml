@@ -27,10 +27,10 @@ jobs:
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.OVH_FTP_SERVER }}
-          username: ${{ secrets.OVH_FTP_USERNAME }}
+          server: ftp.cluster129.hosting.ovh.net
+          username: filippx
           password: ${{ secrets.OVH_FTP_PASSWORD }}
           protocol: ftp
-          port: ${{ secrets.OVH_FTP_PORT }}
-          server-dir: ${{ secrets.OVH_FTP_REMOTE_DIR }}/
+          port: 21
+          server-dir: /www/
           local-dir: site/
