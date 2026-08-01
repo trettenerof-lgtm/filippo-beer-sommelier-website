@@ -1,0 +1,26 @@
+name: Deploy Website
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unzip
+        run: |
+          unzip filippo-beer-sommelier-site-MVP-v1.7-Deployment-Candidate.zip -d site
+
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.OVH_FTP_SERVER }}
+          username: ${{ secrets.OVH_FTP_USERNAME }}
+          password: ${{ secrets.OVH_FTP_PASSWORD }}
+          protocol: ftp
+          port: ${{ secrets.OVH_FTP_PORT }}
+          server-dir: ${{ secrets.OVH_FTP_REMOTE_DIR }}/
+          local-dir: site/
