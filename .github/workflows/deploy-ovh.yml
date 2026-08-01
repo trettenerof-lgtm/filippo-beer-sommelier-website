@@ -3,16 +3,26 @@ name: Deploy Website
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Unzip
+      - name: Extract website
+        shell: bash
         run: |
-          unzip filippo-beer-sommelier-site-MVP-v1.7-Deployment-Candidate.zip -d site
+          set -euo pipefail
+          rm -rf site
+          mkdir site
+          unzip -q filippo-beer-sommelier-site-MVP-v1.7-Deployment-Candidate.zip -d site
+          test -f site/index.html
 
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
