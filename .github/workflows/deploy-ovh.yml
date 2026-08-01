@@ -6,7 +6,7 @@ on:
       release_zip:
         description: "ZIP path stored in the repository"
         required: true
-        default: "release/filippo-beer-sommelier-site-MVP-v1.7-Deployment-Candidate.zip"
+        default: "filippo-beer-sommelier-site-MVP-v1.7-Deployment-Candidate.zip"
 
 permissions:
   contents: read
