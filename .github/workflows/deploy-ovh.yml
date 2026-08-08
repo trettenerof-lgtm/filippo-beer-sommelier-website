@@ -1,11 +1,12 @@
-name: Deploy Website
+name: Deploy Website v1.8
 
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - "filippo-beer-sommelier-site-MVP-v1.7-Deployment-Candidate.zip"
+      - "filippo-beer-sommelier-site-v1.8-Deployment-Candidate.zip"
+      - "filippo-beer-sommelier-site-v1.8-Deployment-Candidate.zip.sha256"
       - ".github/workflows/deploy-ovh.yml"
 
 permissions:
@@ -20,172 +21,56 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Verify release checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum -c filippo-beer-sommelier-site-v1.8-Deployment-Candidate.zip.sha256
+
       - name: Extract website
         shell: bash
         run: |
           set -euo pipefail
           rm -rf site
           mkdir site
-          unzip -q filippo-beer-sommelier-site-MVP-v1.7-Deployment-Candidate.zip -d site
-          test -f site/index.html
+          unzip -q filippo-beer-sommelier-site-v1.8-Deployment-Candidate.zip -d site
+          test "$(unzip -Z1 filippo-beer-sommelier-site-v1.8-Deployment-Candidate.zip | wc -l)" -eq 71
 
-      - name: Apply launch polish
+      - name: Validate Website v1.8 package
         shell: bash
         run: |
           set -euo pipefail
-          python3 <<'PY'
-          from pathlib import Path
-          import re
 
-          root = Path("site")
-          text_extensions = {".html", ".htm", ".xml", ".txt", ".md", ".json", ".css", ".js"}
-
-          for path in root.rglob("*"):
-              if not path.is_file() or path.suffix.lower() not in text_extensions:
-                  continue
-              try:
-                  text = path.read_text(encoding="utf-8")
-              except UnicodeDecodeError:
-                  continue
-
-              original = text
-              # Production domain is .com. Remove stale .it canonicals and structured-data URLs.
-              text = text.replace("https://filippobeersommelier.it", "https://filippobeersommelier.com")
-              text = text.replace("http://filippobeersommelier.it", "https://filippobeersommelier.com")
-
-              # Normalize every Instagram profile link and remove fragile share/deep-link parameters.
-              text = re.sub(
-                  r'https?://(?:www\.)?instagram\.com/filippobeersommelier(?:/)?(?:\?[^\"\'<>\s]*)?',
-                  'https://www.instagram.com/filippobeersommelier/',
-                  text,
-                  flags=re.IGNORECASE,
-              )
-              text = re.sub(
-                  r'instagram://[^\"\'<>\s]+',
-                  'https://www.instagram.com/filippobeersommelier/',
-                  text,
-                  flags=re.IGNORECASE,
-              )
-
-              if text != original:
-                  path.write_text(text, encoding="utf-8")
-
-          index = root / "index.html"
-          html = index.read_text(encoding="utf-8")
-          canonical = '<link rel="canonical" href="https://filippobeersommelier.com/">'
-          if re.search(r'<link[^>]+rel=["\']canonical["\'][^>]*>', html, flags=re.I):
-              html = re.sub(r'<link[^>]+rel=["\']canonical["\'][^>]*>', canonical, html, count=1, flags=re.I)
-          else:
-              html = html.replace("</head>", f"  {canonical}\n</head>", 1)
-
-          markdown_alt = '<link rel="alternate" type="text/markdown" href="/index.md">'
-          if 'type="text/markdown"' not in html:
-              html = html.replace("</head>", f"  {markdown_alt}\n</head>", 1)
-          index.write_text(html, encoding="utf-8")
-
-          (root / "index.md").write_text("""---
-          title: Filippo Beer Sommelier
-          description: Degustazioni, formazione, consulenza ed esperienze dedicate alla cultura della birra.
-          canonical: https://filippobeersommelier.com/
-          language: it
-          ---
-
-          # Filippo Beer Sommelier
-
-          Beer sommelier, BJCP Provisional Judge e Cicerone Certified Beer Server. Il progetto rende la cultura birraria chiara, accessibile e utile attraverso degustazioni, formazione, consulenza e viaggi tematici.
-
-          ## Esplora
-
-          - [Sito ufficiale](https://filippobeersommelier.com/): pagina principale e servizi.
-          - [Instagram](https://www.instagram.com/filippobeersommelier/): contenuti educativi, Beer Review e Style Clash.
-          - [Mappa del sito](/sitemap.md): panoramica delle risorse disponibili.
-          - [Informazioni per assistenti AI](/llms.txt): sintesi del progetto e fonti canoniche.
-
-          ## Credenziali
-
-          - Beer Sommelier
-          - BJCP Provisional Judge
-          - Cicerone Certified Beer Server
-          """, encoding="utf-8")
-
-          (root / "sitemap.md").write_text("""# Filippo Beer Sommelier — Site Map
-
-          ## Core
-
-          - [Homepage](https://filippobeersommelier.com/): identità, servizi, contenuti e contatti.
-          - [Homepage in Markdown](https://filippobeersommelier.com/index.md): versione strutturata per assistenti AI.
-
-          ## Discovery
-
-          - [XML Sitemap](https://filippobeersommelier.com/sitemap.xml): elenco tecnico degli URL indicizzabili.
-          - [Robots](https://filippobeersommelier.com/robots.txt): direttive per crawler.
-          - [LLMs](https://filippobeersommelier.com/llms.txt): guida sintetica per modelli linguistici.
-          - [LLMs Full](https://filippobeersommelier.com/llms-full.txt): contesto esteso del progetto.
-
-          ## Social
-
-          - [Instagram](https://www.instagram.com/filippobeersommelier/): profilo ufficiale.
-          """, encoding="utf-8")
-
-          (root / "AGENTS.md").write_text("""# Filippo Beer Sommelier
-
-          ## Purpose
-
-          This public website presents Filippo Trettenero's beer education, tasting, consulting and beer-travel project.
-
-          ## Canonical identity
-
-          - Website: https://filippobeersommelier.com/
-          - Instagram: https://www.instagram.com/filippobeersommelier/
-          - Language: Italian for the website; English may be used for social editorial content.
-
-          ## Content principles
-
-          - Prioritise accurate, educational and accessible beer communication.
-          - Do not invent certifications, partnerships, prices, dates or availability.
-          - Treat BJCP guidelines and official brewery information as primary technical sources.
-          - Preserve the brand name “Filippo Beer Sommelier”.
-
-          ## Navigation
-
-          Use /sitemap.md, /llms.txt and /llms-full.txt to discover public resources.
-          """, encoding="utf-8")
-
-          (root / "llms.txt").write_text("""# Filippo Beer Sommelier
-
-          > Progetto italiano di divulgazione birraria dedicato a degustazioni, formazione, consulenza ed esperienze di viaggio a tema birra.
-
-          ## Primary resources
-
-          - [Homepage](https://filippobeersommelier.com/): identità, servizi, contenuti e contatti ufficiali.
-          - [Homepage Markdown](https://filippobeersommelier.com/index.md): contenuto principale in formato strutturato.
-          - [Site Map](https://filippobeersommelier.com/sitemap.md): gerarchia delle risorse pubbliche.
-          - [Full context](https://filippobeersommelier.com/llms-full.txt): descrizione estesa per assistenti AI.
-
-          ## Official profiles
-
-          - [Instagram](https://www.instagram.com/filippobeersommelier/): profilo social ufficiale.
-
-          ## Authoritative identity
-
-          Filippo Trettenero è Beer Sommelier, BJCP Provisional Judge e Cicerone Certified Beer Server. Le informazioni su offerte, date, disponibilità e collaborazioni devono essere verificate sul sito ufficiale.
-          """, encoding="utf-8")
-          PY
-
-      - name: Validate launch package
-        shell: bash
-        run: |
-          set -euo pipefail
-          grep -Fq 'https://filippobeersommelier.com/' site/index.html
-          ! grep -R -Fq 'filippobeersommelier.it' site
-          grep -R -Fq 'https://www.instagram.com/filippobeersommelier/' site
+          test -s site/index.html
+          test -s site/.htaccess
           test -s site/robots.txt
           test -s site/sitemap.xml
           test -s site/llms.txt
           test -s site/llms-full.txt
-          test -s site/sitemap.md
-          test -s site/AGENTS.md
-          test -s site/index.md
+          test -s site/viaggi-birrari/index.html
+          test -s site/social-publishing-engine/index.html
+          test -s site/social-publishing-engine/privacy/index.html
+          test -s site/social-publishing-engine/terms/index.html
+
+          grep -Fq '<link href="https://filippobeersommelier.com/" rel="canonical"/>' site/index.html
+          grep -Fq '<a href="/viaggi-birrari/">Viaggi</a>' site/index.html
+          grep -Fq 'https://filippobeersommelier.com/viaggi-birrari/' site/sitemap.xml
+          grep -Fq 'https://filippobeersommelier.com/social-publishing-engine/privacy/' site/sitemap.xml
+          grep -Fq 'https://filippobeersommelier.com/social-publishing-engine/terms/' site/sitemap.xml
+          grep -Fq 'RewriteRule ^ - [R=503,L]' site/.htaccess
+          grep -Fq 'RewriteRule ^ https://filippobeersommelier.com%{REQUEST_URI} [R=301,L,NE]' site/.htaccess
+
+          if grep -R --binary-files=without-match -E 'REPLACE-|codex-preview|trettenerof\.chatgpt\.site|https://filippobeersommelier\.it' site; then
+            exit 1
+          fi
+
+          EXPECTED='tiktok-developers-site-verification=5rkevnoMGFvYZBBBJScWaqST958gxnDx'
+          printf '%s\n' "$EXPECTED" | cmp -s - site/tiktok-developers-site-verification.txt
+          printf '%s\n' "$EXPECTED" | cmp -s - site/social-publishing-engine/tiktok-developers-site-verification.txt
+          cmp -s site/tiktok-developers-site-verification.txt site/social-publishing-engine/tiktok-developers-site-verification.txt
+
+          test "$(grep -Rl --include='index.html' 'brevo-custom.css' site | wc -l)" -eq 2
+          test "$(grep -Rl --include='index.html' 'brevo-config.js' site | wc -l)" -eq 2
 
       - name: Install lftp
         shell: bash
