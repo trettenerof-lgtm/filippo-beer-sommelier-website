@@ -84,92 +84,92 @@ jobs:
           index.write_text(html, encoding="utf-8")
 
           (root / "index.md").write_text("""---
-title: Filippo Beer Sommelier
-description: Degustazioni, formazione, consulenza ed esperienze dedicate alla cultura della birra.
-canonical: https://filippobeersommelier.com/
-language: it
----
+          title: Filippo Beer Sommelier
+          description: Degustazioni, formazione, consulenza ed esperienze dedicate alla cultura della birra.
+          canonical: https://filippobeersommelier.com/
+          language: it
+          ---
 
-# Filippo Beer Sommelier
+          # Filippo Beer Sommelier
 
-Beer sommelier, BJCP Provisional Judge e Cicerone Certified Beer Server. Il progetto rende la cultura birraria chiara, accessibile e utile attraverso degustazioni, formazione, consulenza e viaggi tematici.
+          Beer sommelier, BJCP Provisional Judge e Cicerone Certified Beer Server. Il progetto rende la cultura birraria chiara, accessibile e utile attraverso degustazioni, formazione, consulenza e viaggi tematici.
 
-## Esplora
+          ## Esplora
 
-- [Sito ufficiale](https://filippobeersommelier.com/): pagina principale e servizi.
-- [Instagram](https://www.instagram.com/filippobeersommelier/): contenuti educativi, Beer Review e Style Clash.
-- [Mappa del sito](/sitemap.md): panoramica delle risorse disponibili.
-- [Informazioni per assistenti AI](/llms.txt): sintesi del progetto e fonti canoniche.
+          - [Sito ufficiale](https://filippobeersommelier.com/): pagina principale e servizi.
+          - [Instagram](https://www.instagram.com/filippobeersommelier/): contenuti educativi, Beer Review e Style Clash.
+          - [Mappa del sito](/sitemap.md): panoramica delle risorse disponibili.
+          - [Informazioni per assistenti AI](/llms.txt): sintesi del progetto e fonti canoniche.
 
-## Credenziali
+          ## Credenziali
 
-- Beer Sommelier
-- BJCP Provisional Judge
-- Cicerone Certified Beer Server
-""", encoding="utf-8")
+          - Beer Sommelier
+          - BJCP Provisional Judge
+          - Cicerone Certified Beer Server
+          """, encoding="utf-8")
 
           (root / "sitemap.md").write_text("""# Filippo Beer Sommelier — Site Map
 
-## Core
+          ## Core
 
-- [Homepage](https://filippobeersommelier.com/): identità, servizi, contenuti e contatti.
-- [Homepage in Markdown](https://filippobeersommelier.com/index.md): versione strutturata per assistenti AI.
+          - [Homepage](https://filippobeersommelier.com/): identità, servizi, contenuti e contatti.
+          - [Homepage in Markdown](https://filippobeersommelier.com/index.md): versione strutturata per assistenti AI.
 
-## Discovery
+          ## Discovery
 
-- [XML Sitemap](https://filippobeersommelier.com/sitemap.xml): elenco tecnico degli URL indicizzabili.
-- [Robots](https://filippobeersommelier.com/robots.txt): direttive per crawler.
-- [LLMs](https://filippobeersommelier.com/llms.txt): guida sintetica per modelli linguistici.
-- [LLMs Full](https://filippobeersommelier.com/llms-full.txt): contesto esteso del progetto.
+          - [XML Sitemap](https://filippobeersommelier.com/sitemap.xml): elenco tecnico degli URL indicizzabili.
+          - [Robots](https://filippobeersommelier.com/robots.txt): direttive per crawler.
+          - [LLMs](https://filippobeersommelier.com/llms.txt): guida sintetica per modelli linguistici.
+          - [LLMs Full](https://filippobeersommelier.com/llms-full.txt): contesto esteso del progetto.
 
-## Social
+          ## Social
 
-- [Instagram](https://www.instagram.com/filippobeersommelier/): profilo ufficiale.
-""", encoding="utf-8")
+          - [Instagram](https://www.instagram.com/filippobeersommelier/): profilo ufficiale.
+          """, encoding="utf-8")
 
           (root / "AGENTS.md").write_text("""# Filippo Beer Sommelier
 
-## Purpose
+          ## Purpose
 
-This public website presents Filippo Trettenero's beer education, tasting, consulting and beer-travel project.
+          This public website presents Filippo Trettenero's beer education, tasting, consulting and beer-travel project.
 
-## Canonical identity
+          ## Canonical identity
 
-- Website: https://filippobeersommelier.com/
-- Instagram: https://www.instagram.com/filippobeersommelier/
-- Language: Italian for the website; English may be used for social editorial content.
+          - Website: https://filippobeersommelier.com/
+          - Instagram: https://www.instagram.com/filippobeersommelier/
+          - Language: Italian for the website; English may be used for social editorial content.
 
-## Content principles
+          ## Content principles
 
-- Prioritise accurate, educational and accessible beer communication.
-- Do not invent certifications, partnerships, prices, dates or availability.
-- Treat BJCP guidelines and official brewery information as primary technical sources.
-- Preserve the brand name “Filippo Beer Sommelier”.
+          - Prioritise accurate, educational and accessible beer communication.
+          - Do not invent certifications, partnerships, prices, dates or availability.
+          - Treat BJCP guidelines and official brewery information as primary technical sources.
+          - Preserve the brand name “Filippo Beer Sommelier”.
 
-## Navigation
+          ## Navigation
 
-Use /sitemap.md, /llms.txt and /llms-full.txt to discover public resources.
-""", encoding="utf-8")
+          Use /sitemap.md, /llms.txt and /llms-full.txt to discover public resources.
+          """, encoding="utf-8")
 
           (root / "llms.txt").write_text("""# Filippo Beer Sommelier
 
-> Progetto italiano di divulgazione birraria dedicato a degustazioni, formazione, consulenza ed esperienze di viaggio a tema birra.
+          > Progetto italiano di divulgazione birraria dedicato a degustazioni, formazione, consulenza ed esperienze di viaggio a tema birra.
 
-## Primary resources
+          ## Primary resources
 
-- [Homepage](https://filippobeersommelier.com/): identità, servizi, contenuti e contatti ufficiali.
-- [Homepage Markdown](https://filippobeersommelier.com/index.md): contenuto principale in formato strutturato.
-- [Site Map](https://filippobeersommelier.com/sitemap.md): gerarchia delle risorse pubbliche.
-- [Full context](https://filippobeersommelier.com/llms-full.txt): descrizione estesa per assistenti AI.
+          - [Homepage](https://filippobeersommelier.com/): identità, servizi, contenuti e contatti ufficiali.
+          - [Homepage Markdown](https://filippobeersommelier.com/index.md): contenuto principale in formato strutturato.
+          - [Site Map](https://filippobeersommelier.com/sitemap.md): gerarchia delle risorse pubbliche.
+          - [Full context](https://filippobeersommelier.com/llms-full.txt): descrizione estesa per assistenti AI.
 
-## Official profiles
+          ## Official profiles
 
-- [Instagram](https://www.instagram.com/filippobeersommelier/): profilo social ufficiale.
+          - [Instagram](https://www.instagram.com/filippobeersommelier/): profilo social ufficiale.
 
-## Authoritative identity
+          ## Authoritative identity
 
-Filippo Trettenero è Beer Sommelier, BJCP Provisional Judge e Cicerone Certified Beer Server. Le informazioni su offerte, date, disponibilità e collaborazioni devono essere verificate sul sito ufficiale.
-""", encoding="utf-8")
+          Filippo Trettenero è Beer Sommelier, BJCP Provisional Judge e Cicerone Certified Beer Server. Le informazioni su offerte, date, disponibilità e collaborazioni devono essere verificate sul sito ufficiale.
+          """, encoding="utf-8")
           PY
 
       - name: Validate launch package
